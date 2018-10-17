@@ -1,4 +1,4 @@
-# Check If Type
+# HSLA
 
 HSLA creates, modifies, stringifies HSLA colors
 
