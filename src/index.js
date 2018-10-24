@@ -1,8 +1,8 @@
 export default class {
-  constructor (hue, saturation, litness, alpha) {
+  constructor (hue, saturation, lightness, alpha) {
     this.hue = hue
     this.saturation = saturation
-    this.lightness = litness
+    this.lightness = lightness
     this.alpha = alpha
   }
 
