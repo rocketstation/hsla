@@ -1,4 +1,16 @@
-export default class {
+class HSLA {
+  static parse = (str) => {
+    const [
+      ,
+      hue,
+      saturation,
+      lightness,
+      alpha,
+    ] = /^hsla\((\d+),\s*([\d.]+)%,\s*([\d.]+)%,\s*(\d*(?:\.\d+)?)\)$/.exec(str)
+
+    return new HSLA(Number(hue), Number(saturation), Number(lightness), Number(alpha))
+  }
+
   constructor (hue, saturation, lightness, alpha) {
     this.hue = hue
     this.saturation = saturation
@@ -13,3 +25,5 @@ export default class {
     a = this.alpha,
   } = {}) { return `hsla(${h}, ${s}%, ${l}%, ${a})` }
 }
+
+export default HSLA

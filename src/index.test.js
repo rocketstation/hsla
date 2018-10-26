@@ -2,6 +2,15 @@ import HSLA from './index'
 
 const color = new HSLA(0, 0, 0, 1)
 
+it('parses HSLA string', () => {
+  const color = HSLA.parse('hsla(0, 0%, 0%, 0)')
+
+  expect(color.hue).toBe(0)
+  expect(color.saturation).toBe(0)
+  expect(color.lightness).toBe(0)
+  expect(color.alpha).toBe(0)
+})
+
 it('defines hue, saturation, lightness, alpha', () => {
   expect(color.hue).toBe(0)
   expect(color.saturation).toBe(0)
