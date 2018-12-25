@@ -1,29 +1,39 @@
-class HSLA {
-  static parse = (str) => {
-    const [
-      ,
-      hue,
-      saturation,
-      lightness,
-      alpha,
-    ] = /^hsla\((\d+),\s*([\d.]+)%,\s*([\d.]+)%,\s*(\d*(?:\.\d+)?)\)$/.exec(str)
-
-    return new HSLA(Number(hue), Number(saturation), Number(lightness), Number(alpha))
+function validate(v, min, max) {
+  switch (true) {
+    case v < min:
+      return min
+    case v > max:
+      return max
   }
 
-  constructor (hue, saturation, lightness, alpha) {
-    this.hue = hue
-    this.saturation = saturation
-    this.lightness = lightness
-    this.alpha = alpha
-  }
-
-  hsla ({
-    h = this.hue,
-    s = this.saturation,
-    l = this.lightness,
-    a = this.alpha,
-  } = {}) { return `hsla(${h}, ${s}%, ${l}%, ${a})` }
+  return v
 }
 
-export default HSLA
+module.exports = function(hue, saturation, lightness, alpha) {
+  var h = hue
+  var s = saturation
+  var l = lightness
+  var a = alpha != null ? alpha : 1
+
+  if (arguments.length === 1) {
+    var hsla = /^hsla\((\d+),\s*([\d.]+)%,\s*([\d.]+)%,\s*(\d*(?:\.\d+)?)\)$/.exec(
+      arguments[0]
+    )
+
+    h = hsla[1]
+    s = hsla[2]
+    l = hsla[3]
+    a = hsla[4]
+  }
+
+  return function(arg) {
+    if (typeof arg === 'function') return arg(h, s, l, a)()
+
+    h = parseInt(validate(h, 0, 360), 10)
+    s = validate(s, 0, 100)
+    l = validate(l, 0, 100)
+    a = validate(arg != null ? arg : a, 0, 1)
+
+    return `hsla(${h}, ${s}%, ${l}%, ${a})`
+  }
+}

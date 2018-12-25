@@ -11,29 +11,19 @@ npm i @rocketstation/hsla
 ## Usage
 
 ```javascript
-import HSLA from '@rocketstation/hsla'
+import hsla from '@rocketstation/hsla'
 
-const color = new HSLA(0, 0, 0, 1)
+console.log(hsla(0, 0, 0)()) // hsla(0, 0%, 0%, 1)
+console.log(hsla(0, 0, 0, 1)()) // hsla(0, 0%, 0%, 1)
+console.log(hsla('hsla(0, 0%, 0%, 1)')()) // hsla(0, 0%, 0%, 1)
 
-console.log(color.hsla()) // hsla(0, 0%, 0%, 1)
-console.log(color.hsla({ a: 0 })) // hsla(0, 0%, 0%, 0)
+console.log(hsla(0, 0, 0, 1)(0.5)) // hsla(0, 0%, 0%, 0.5)
+console.log(hsla(0, 0, 0, 1)((h, s, l, a) => hsla(h + 360, s + 100, l + 100, a - 1))) // hsla(360, 100%, 100%, 0)
+
+console.log(hsla(999, 999, 999, 999)()) // hsla(360, 100%, 100%, 1)
+console.log(hsla(-999, -999, -999, -999)()) // hsla(0, 0%, 0%, 0)
+console.log(hsla(0.999, 0, 0)()) // hsla(0, 0%, 0%, 1)
 ```
-
-## API
-`HSLA.parse(hslaStr)` - parces valid hsla string & returns `HSLA` instance
-
-`new HSLA(h, s, l, a)` - returns `HSLA` instance
-
-`new HSLA(h, s, l, a).hue` - return hue
-
-`new HSLA(h, s, l, a).saturation` - return saturation
-
-`new HSLA(h, s, l, a).lightness` - return lightness
-
-`new HSLA(h, s, l, a).alpha` - returns alpha
-
-`new HSLA(h, s, l, a).hsla({ h, s, l, a })` - modifies hue, saturation, lightness, alpha if passed & returns hsla string
-
 
 ## Motivation
 
