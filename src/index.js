@@ -20,20 +20,39 @@ module.exports = function(hue, saturation, lightness, alpha) {
       arguments[0]
     )
 
-    h = hsla[1]
-    s = hsla[2]
-    l = hsla[3]
-    a = hsla[4]
+    h = Number(hsla[1])
+    s = Number(hsla[2])
+    l = Number(hsla[3])
+    a = Number(hsla[4])
   }
 
   return function(arg) {
-    if (typeof arg === 'function') return arg(h, s, l, a)()
+    var next = {
+      h: h,
+      s: s,
+      l: l,
+      a: a,
+    }
 
-    h = parseInt(validate(h, 0, 360), 10)
-    s = validate(s, 0, 100)
-    l = validate(l, 0, 100)
-    a = validate(arg != null ? arg : a, 0, 1)
+    switch (typeof arg) {
+      case 'number':
+        next.a = arg
+        break
+      case 'function':
+        Object.assign(next, arg({ h, s, l, a }))
+        break
+    }
 
-    return `hsla(${h}, ${s}%, ${l}%, ${a})`
+    return (
+      'hsla' +
+      '(' +
+      [
+        parseInt(validate(next.h, 0, 360), 10),
+        validate(next.s, 0, 100) + '%',
+        validate(next.l, 0, 100) + '%',
+        validate(next.a, 0, 1),
+      ].join(', ') +
+      ')'
+    )
   }
 }

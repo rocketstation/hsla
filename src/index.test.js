@@ -18,7 +18,12 @@ it('modifies alpha; returns valid HSLA string', () => {
 
 it('modifies hue, saturation, lightness alpha; returns valid HSLA string', () => {
   expect(
-    hsla(0, 0, 0)((h, s, l, a) => hsla(h + 360, s + 100, l + 100, a - 1))
+    hsla(0, 0, 0)(({ h, s, l, a }) => ({
+      h: h + 360,
+      s: s + 100,
+      l: l + 100,
+      a: a - 1,
+    }))
   ).toBe('hsla(360, 100%, 100%, 0)')
 })
 
