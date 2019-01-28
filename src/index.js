@@ -1,3 +1,5 @@
+var pattern = /^hsla\((\d+),\s*([\d.]+)%,\s*([\d.]+)%,\s*(\d*(?:\.\d+)?)\)$/
+
 function validate(v, min, max) {
   switch (true) {
     case v < min:
@@ -9,50 +11,60 @@ function validate(v, min, max) {
   return v
 }
 
-module.exports = function(hue, saturation, lightness, alpha) {
-  var h = hue
-  var s = saturation
-  var l = lightness
-  var a = alpha != null ? alpha : 1
+function toString(h, s, l, a) {
+  return (
+    'hsla(' +
+    validate(Math.round(h), 0, 360) +
+    ',' +
+    validate(s, 0, 100) +
+    '%,' +
+    validate(l, 0, 100) +
+    '%,' +
+    validate(a / 100, 0, 1) +
+    ')'
+  )
+}
+
+module.exports = function hsla() {
+  var h, s, l, a
 
   if (arguments.length === 1) {
-    var hsla = /^hsla\((\d+),\s*([\d.]+)%,\s*([\d.]+)%,\s*(\d*(?:\.\d+)?)\)$/.exec(
-      arguments[0]
-    )
+    var color = pattern.exec(arguments[0])
 
-    h = Number(hsla[1])
-    s = Number(hsla[2])
-    l = Number(hsla[3])
-    a = Number(hsla[4])
+    if (!color) return null
+
+    h = Number(color[1])
+    s = Number(color[2])
+    l = Number(color[3])
+    a = Number(color[4]) * 100
+  } else {
+    h = arguments[0]
+    s = arguments[1]
+    l = arguments[2]
+    a = arguments[3] != null ? arguments[3] : 100
   }
 
-  return function(arg) {
-    var next = {
-      h: h,
-      s: s,
-      l: l,
-      a: a,
-    }
-
-    switch (typeof arg) {
+  return function(modifier) {
+    switch (typeof modifier) {
       case 'number':
-        next.a = arg
-        break
-      case 'function':
-        Object.assign(next, arg({ h, s, l, a }))
-        break
+        return toString(h, s, l, modifier)
+      case 'object':
+        return toString(
+          modifier.hasOwnProperty('H')
+            ? modifier.H
+            : h + (modifier.hasOwnProperty('h') ? modifier.h : 0),
+          modifier.hasOwnProperty('S')
+            ? modifier.S
+            : s + (modifier.hasOwnProperty('s') ? modifier.s : 0),
+          modifier.hasOwnProperty('L')
+            ? modifier.L
+            : l + (modifier.hasOwnProperty('l') ? modifier.l : 0),
+          modifier.hasOwnProperty('A')
+            ? modifier.A
+            : a + (modifier.hasOwnProperty('a') ? modifier.a : 0)
+        )
     }
 
-    return (
-      'hsla' +
-      '(' +
-      [
-        parseInt(validate(next.h, 0, 360), 10),
-        validate(next.s, 0, 100) + '%',
-        validate(next.l, 0, 100) + '%',
-        validate(next.a, 0, 1),
-      ].join(', ') +
-      ')'
-    )
+    return toString(h, s, l, a)
   }
 }
