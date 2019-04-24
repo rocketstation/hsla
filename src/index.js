@@ -1,4 +1,5 @@
-var pattern = /^hsla\((\d+),\s*([\d.]+)%,\s*([\d.]+)%,\s*(\d*(?:\.\d+)?)\)$/
+var HSLA = /^hsla\((\d+),\s*([\d.]+)%,\s*([\d.]+)%,\s*(\d*(?:\.\d+)?)\)$/
+var HSL = /^hsl\((\d+),\s*([\d.]+)%,\s*([\d.]+)%\)$/
 
 function validate(v, min, max) {
   switch (true) {
@@ -29,14 +30,14 @@ module.exports = function hsla() {
   var h, s, l, a
 
   if (arguments.length === 1) {
-    var color = pattern.exec(arguments[0])
+    var color = HSLA.exec(arguments[0]) || HSL.exec(arguments[0])
 
     if (!color) return null
 
     h = Number(color[1])
     s = Number(color[2])
     l = Number(color[3])
-    a = Number(color[4]) * 100
+    a = color[4] ? Number(color[4]) * 100 : 100
   } else {
     h = arguments[0]
     s = arguments[1]

@@ -14,6 +14,8 @@ npm i @rocketstation/hsla
 import hsla from '@rocketstation/hsla'
 
 console.log(hsla(0, 0, 0)()) // hsla(0, 0%, 0%, 1)
+console.log(hsla('hsl(0, 0%, 0%)')()) // hsla(0, 0%, 0%, 1)
+
 console.log(hsla(0, 0, 0, 100)()) // hsla(0, 0%, 0%, 1)
 console.log(hsla('hsla(0, 0%, 0%, 1)')()) // hsla(0, 0%, 0%, 1)
 

@@ -16,6 +16,10 @@ it('gets valid HSLA string; returns valid HSLA string', () => {
   expect(hsla('hsla(0, 0%, 0%, 1)')()).toBe('hsla(0,0%,0%,1)')
 })
 
+it('gets valid HSL string; returns valid HSLA string', () => {
+  expect(hsla('hsl(0, 0%, 0%)')()).toBe('hsla(0,0%,0%,1)')
+})
+
 it('modifies alpha; returns valid HSLA string', () => {
   expect(hsla(0, 0, 0, 100)(0)).toBe('hsla(0,0%,0%,0)')
 })
